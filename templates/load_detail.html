@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}{{ load.reference }} · RN YADAV TRAILER SERVICE{% endblock %}
+{% block content %}
+<p><a href="/">← Back to loads</a></p>
+<div class="hero"><div><p class="eyebrow">{{ load.reference }}</p><h1>{{ load.origin }} <span class="muted">→</span> {{ load.destination }}</h1><p>{{ load.caller_name }} · {{ load.caller_phone or 'No phone recorded' }}</p></div><span class="status large">{{ load.status.replace('_',' ') }}</span></div>
+<section class="details">
+  <div><small>Material</small><strong>{{ load.material or 'Not specified' }}</strong></div>
+  <div><small>Vehicle</small><strong>{{ load.vehicle_type }}</strong></div>
+  <div><small>Weight</small><strong>{{ load.weight_tonnes or '—' }} tonnes</strong></div>
+  <div><small>Customer rate</small><strong>{% if load.offered_rate is not none %}₹{{ '%.2f'|format(load.offered_rate) }}{% else %}Not specified{% endif %}</strong></div>
+  <div><small>Payment terms</small><strong>{{ load.payment_terms }}</strong></div>
+  <div><small>Enquiry date</small><strong>{{ load.enquiry_date }}</strong></div>
+</section>
+{% if load.notes %}<section class="panel"><h3>Notes</h3><p>{{ load.notes }}</p></section>{% endif %}
+<section class="panel">
+<h2>Update load status</h2>
+<form class="inline-form" method="post" action="/loads/{{ load.id }}/status"><select name="status">{% for s in ['OPEN','QUOTING','ASSIGNED','IN_TRANSIT','DELIVERED','CANCELLED'] %}<option value="{{ s }}" {% if load.status == s %}selected{% endif %}>{{ s.replace('_',' ') }}</option>{% endfor %}</select><button>Update status</button></form>
+</section>
+<section class="panel">
+<h2>Transporter offers / bids</h2>
+{% if load.bids %}<div class="table-wrap"><table><thead><tr><th>Transporter</th><th>Phone</th><th>Vehicle</th><th>Quoted rate</th><th>Availability</th></tr></thead><tbody>{% for bid in load.bids %}<tr><td>{{ bid.transporter_name }}</td><td>{{ bid.transporter_phone }}</td><td>{{ bid.vehicle_number or '—' }}</td><td>₹{{ '%.2f'|format(bid.quoted_rate) }}</td><td>{{ bid.availability.replace('_',' ') }}</td></tr>{% endfor %}</tbody></table></div>{% else %}<p class="muted">No offers recorded for this enquiry yet.</p>{% endif %}
+<h3 class="subheading">Add an offer</h3>
+<form class="form-grid compact" method="post" action="/loads/{{ load.id }}/bids">
+<label>Transporter name *<input name="transporter_name" required></label><label>Phone<input name="transporter_phone"></label><label>Vehicle number<input name="vehicle_number" placeholder="e.g. AS01XX0000"></label><label>Quoted rate (₹) *<input name="quoted_rate" type="number" min="0" step="0.01" required></label><label>Availability<select name="availability"><option value="TO_CONFIRM">To confirm</option><option value="AVAILABLE">Available</option><option value="UNAVAILABLE">Unavailable</option></select></label><label class="wide">Notes<textarea name="notes" rows="2"></textarea></label><div class="wide"><button type="submit">Save offer</button></div>
+</form>
+</section>
+{% endblock %}
