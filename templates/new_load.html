@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}New load · RN YADAV TRAILER SERVICE{% endblock %}
+{% block content %}
+<div class="page-heading"><p class="eyebrow">LOAD REGISTER</p><h1>New load enquiry</h1><p>Enter the details shared by the caller. You can add transporter offers after saving.</p></div>
+<form class="panel form-grid" action="/loads" method="post">
+  <label>Caller / customer name *<input name="caller_name" required maxlength="120"></label>
+  <label>Contact number<input name="caller_phone" maxlength="30"></label>
+  <label>Origin *<input name="origin" required maxlength="160" placeholder="Pickup city / location"></label>
+  <label>Destination *<input name="destination" required maxlength="160" placeholder="Delivery city / location"></label>
+  <label>Material / goods<input name="material" maxlength="120"></label>
+  <label>Vehicle requirement<select name="vehicle_type"><option>Trailer</option><option>10 Wheeler</option><option>12 Wheeler</option><option>6 Wheeler</option><option>Open Body Truck</option><option>Other</option></select></label>
+  <label>Weight (tonnes)<input name="weight_tonnes" type="number" min="0" step="0.01"></label>
+  <label>Customer offered rate (₹)<input name="offered_rate" type="number" min="0" step="0.01"></label>
+  <label class="wide">Payment terms<input name="payment_terms" maxlength="200" placeholder="e.g. advance, balance after delivery, credit days"></label>
+  <label class="wide">Notes<textarea name="notes" rows="4" placeholder="Loading date, special instructions, negotiation notes…"></textarea></label>
+  <div class="actions wide"><a class="button secondary" href="/">Cancel</a><button type="submit">Save enquiry</button></div>
+</form>
+{% endblock %}
