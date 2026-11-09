@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Transporters · RN YADAV TRAILER SERVICE{% endblock %}
+{% block content %}
+<div class="page-heading"><p class="eyebrow">NETWORK DIRECTORY</p><h1>Transporters</h1><p>Keep transporter contacts and vehicle capabilities in one place.</p></div>
+<section class="panel"><h2>Add transporter</h2>
+<form class="form-grid compact" method="post" action="/transporters">
+<label>Name / company *<input name="name" required></label><label>Phone *<input name="phone" required></label><label>Base location<input name="base_location"></label><label>Vehicle types<input name="vehicle_types" placeholder="Trailer, 10 wheeler…"></label><label class="wide">Notes<textarea name="notes" rows="2"></textarea></label><div class="wide"><button>Save transporter</button></div>
+</form></section>
+<section class="panel"><h2>Saved contacts</h2>
+{% if transporters %}<div class="table-wrap"><table><thead><tr><th>Name</th><th>Phone</th><th>Base</th><th>Vehicle types</th></tr></thead><tbody>{% for t in transporters %}<tr><td>{{ t.name }}</td><td>{{ t.phone }}</td><td>{{ t.base_location or '—' }}</td><td>{{ t.vehicle_types or '—' }}</td></tr>{% endfor %}</tbody></table></div>{% else %}<p class="muted">No transporter contacts saved yet.</p>{% endif %}
+</section>
+{% endblock %}
