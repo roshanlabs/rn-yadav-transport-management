@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Loads · RN YADAV TRAILER SERVICE{% endblock %}
+{% block content %}
+<section class="hero">
+  <div><p class="eyebrow">OPERATIONS OVERVIEW</p><h1>Load desk</h1><p>Capture enquiries, compare transporter offers and follow each movement.</p></div>
+  <a class="button" href="/loads/new">+ Add load enquiry</a>
+</section>
+<section class="stats">
+  <div><small>Total loads</small><strong>{{ counts.total }}</strong></div>
+  <div><small>Open enquiries</small><strong>{{ counts.open }}</strong></div>
+  <div><small>Assigned</small><strong>{{ counts.assigned }}</strong></div>
+  <div><small>Delivered</small><strong>{{ counts.delivered }}</strong></div>
+</section>
+<form class="filters" method="get">
+  <input name="q" value="{{ q }}" placeholder="Search reference, caller or route">
+  <select name="status"><option value="">All statuses</option>{% for s in ['OPEN','QUOTING','ASSIGNED','IN_TRANSIT','DELIVERED','CANCELLED'] %}<option value="{{ s }}" {% if status == s %}selected{% endif %}>{{ s.replace('_',' ') }}</option>{% endfor %}</select>
+  <button type="submit">Filter</button>
+</form>
+<div class="section-head"><h2>Recent load enquiries</h2><span>{{ loads|length }} shown</span></div>
+{% if loads %}
+<div class="table-wrap"><table><thead><tr><th>Reference</th><th>Route</th><th>Caller</th><th>Vehicle / weight</th><th>Rate</th><th>Status</th></tr></thead><tbody>
+{% for load in loads %}<tr><td><a href="/loads/{{ load.id }}">{{ load.reference }}</a><small>{{ load.enquiry_date }}</small></td><td><strong>{{ load.origin }}</strong><small>to {{ load.destination }}</small></td><td>{{ load.caller_name }}<small>{{ load.caller_phone }}</small></td><td>{{ load.vehicle_type }}<small>{{ load.weight_tonnes or '—' }} tonnes</small></td><td>{% if load.offered_rate is not none %}₹{{ '%.2f'|format(load.offered_rate) }}{% else %}—{% endif %}</td><td><span class="status">{{ load.status.replace('_',' ') }}</span></td></tr>{% endfor %}
+</tbody></table></div>
+{% else %}<div class="empty"><h3>No loads yet</h3><p>Add your first enquiry to start building the load register.</p><a href="/loads/new">Create a load enquiry →</a></div>{% endif %}
+{% endblock %}
